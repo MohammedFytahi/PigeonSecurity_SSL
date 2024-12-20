@@ -1,0 +1,99 @@
+spring:
+  application:
+    name: pigeon
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pigeon    # URL de la base de données PostgreSQL
+    username: postgres                              # Utilisateur de la base de données
+    password: 2001                                  # Mot de passe de la base de données
+    driver-class-name: org.postgresql.Driver        # Driver PostgreSQL
+
+  jpa:
+    hibernate:
+      ddl-auto: update                              # Stratégie pour la mise à jour du schéma (peut être "create", "update", "none", etc.)
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect # Dialecte pour PostgreSQL
+        id.new_generator_mappings: true             # Utilisation du nouveau générateur d'ID
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/pigeon-realm  # URL du realm Keycloak pour obtenir le JWT
+          jwk-set-uri: http://localhost:8080/realms/pigeon-realm/protocol/openid-connect/certs  # URL des clés publiques de Keycloak
+      public-key: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6gREQwqR3imo1tT+isgy
+        ZR32FKKxHQmNHKjBl8uSR6W8e7cjaKqCedw01OI9KWvzc6/J16S8ibYZWv/Jg0lj
+        9JUh2ot2UxzJqLXdCLCyYiM7DTnv7u0ruGBemkrnfHJh19dDBZ8X88QNPZQkssdP
+        QAxNLTqJP3pzZX1XP/pGRbUKEfiUeJJL9BNICX1UNj73d5w/C6QD4fR9JpNimoiZ
+        3qx6U4+rC6KbKpORB8aA0WyMgEnNcw78+zgVpw3J9PD7zUo0j2Qb7ozoGSUBtlgh
+        ObowyIzDFj+AIKcvJMLFTV6nTFNwPtFgtToYpdmqa8LgTzXlWrU+c+RdUgKY0V73
+        MQIDAQAB
+        -----END PUBLIC KEY-----
+
+  keycloak:
+    auth-server-url: http://localhost:8080/auth   # URL de votre serveur Keycloak
+    realm: pigeon-realm                           # Nom de votre realm Keycloak
+    resource: pigeon-client                       # Nom de votre client dans Keycloak
+    credentials:
+      secret: your-client-secret                  # Secret du client configuré dans Keycloak
+    bearer-only: true                             # Définit l'application comme une ressource protégée par Keycloak
+
+server:
+  port: 8444                                    # Activation du port HTTPS
+  ssl:
+    key-store: classpath:keystore.p12            # Chemin du fichier de certificat (le fichier .p12)
+    key-store-password: 12344321                   # Mot de passe pour accéder au keystore
+    key-store-type: PKCS12                       # Format du keystore (PKCS12)
+    key-alias: pigeonSkyRace
+    enabled: true
+
+  private-key: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDqBERDCpHeKajW
+    1P6KyDJlHfYUorEdCY0cqMGXy5JHpbx7tyNoqoJ53DTU4j0pa/Nzr8nXpLyJthla
+    /8mDSWP0lSHai3ZTHMmotd0IsLJiIzsNOe/u7Su4YF6aSud8cmHX10MFnxfzxA09
+    lCSyx09ADE0tOok/enNlfVc/+kZFtQoR+JR4kkv0E0gJfVQ2Pvd3nD8LpAPh9H0m
+    k2KaiJnerHpTj6sLopsqk5EHxoDRbIyASc1zDvz7OBWnDcn08PvNSjSPZBvujOgZ
+    JQG2WCE5ujDIjMMWP4Agpy8kwsVNXqdMU3A+0WC1Ohil2aprwuBPNeVatT5z5F1S
+    ApjRXvcxAgMBAAECggEASufRt8ne1gdssVNdJKwfIWm9Nm67FYnUnttPmFiDeqaM
+    1ebRkTOe7wWy7X97R1J0C1A14e4roULmC9A7PuhTc9r2ip9AYSsiS3vnA9yXRL11
+    Le8hI0/MQkiqj2Wxgg6UzgNrwxVhE9hpyo+sTYNplR066OLHQsfdvxsnPeXM74t+
+    OO6eHbj6yJYPi9mo07pc17ROvOU6uDT6CU/NrtVi8BepztzExp7noNAGwDIqxgXm
+    p5nFA2qVIfG7Uepvtz+wQtcqngOCX0VfJ3x1jB/ynS99vbGHs8qUQaMq9K/MzbyV
+    POaiDbro2Km5diMPJLm79v572k1XO2yz4GHeAqje9wKBgQD3z9zOGpbi9G+X/Tid
+    pKx9qeeIII2H5FtvtBiMzqwX6b3cWzYAdWszPckT69MrZ0NKShfNh25HXrVUQVKP
+    6iQfbBVVNgRf4NGltMKH9Pd2Mc6sfu9VxaaslSIL7/c89m/K/fGz6bY30t1dxZDQ
+    M1ggyzZt6lQJdWYgUOGLBpjMhwKBgQDxv7crD4GG8G+IwOpCHhyvrnBHGD3KYxL4
+    GYMEhzWdWp+ArmhzA15vnEzxo1/UZwwQyYxK2RPDj0ilIEWO+HWfp4x2xlHS7P+j
+    AmamGJDho+RtaOU75hMpBzp4DZ5Xyxy76XwBHpMxYhPfjjpHKHM7vSdkcM+CJdgh
+    0Fk6Zt8EhwKBgGJnQB73oALvXYDVJK40veoIldAQXSMhIs3wje8cAmpcfvAJqB/2
+    gGMQndAzTN9nWekeEuWiacAdc5PJfKd5Km7v1GjJ0mLgO1+5r6WdOMbOcGs+3HsK
+    yWyuq55h46NpmGra/CedHqZ8LTsXQLHsMYqUJ0DuVACNhcg/VdCHBhXxAoGAGd9w
+    1RT1weFdrn8nEyhx3YOH1LQNeOmdkBv637Mw08RtKbKAzz5fDwblXT8k9HCK5AkO
+    ELym1tkw5ytLBoAk5o9iAxw6iZ5/xYxuO/yJFP0bZ3JAhmabSlrRsSOT/MVqL9pP
+    QTdqfXCHu/dW2WLE4nHeE2vXaZBvTz8jLZLw72UCgYEAvTkX15WaW9XFCAyT3Dc+
+    zYGgRrR4ii1Aj3yH6tpQJS1KPH7h2KmOtDD8Y/Qci2rXSLjHw1ozuor/TFyhlIH8
+    9kfR2w4f6jl8QVRJSi1a1TeIaq/L38EV3zseiED4IEjcz3iDioZx0crTmiJ2SltQ
+    Dpve6X6mwk33LTM/NgosOi8=
+    -----END PRIVATE KEY-----
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG               # Logs pour les requêtes web
+    org.springframework.data.jpa: DEBUG           # Logs pour JPA
+    org.hibernate: INFO                           # Logs pour Hibernate
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"                             # Expose tous les endpoints de gestion (health, info, etc.)
+  endpoint:
+    health:
+      enabled: true                               # Activation de l'endpoint /health
+    info:
+      enabled: true                               # Activation de l'endpoint /info
